@@ -1,0 +1,6 @@
+{
+  "name": "jueves-app",
+  "short_name": "jueves-app",
+  "start_url": "/",
+  "display": "standalone"
+}
