@@ -1,0 +1,64 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="posicion-raton">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+
+    <div>[[x]] x [[y]]</div>
+
+  </template>
+
+  <script>
+    /**
+     * `posicion-raton` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class PosicionRaton extends Polymer.Element {
+      /**
+       * String providing the tag name to register the element under.
+       */
+      static get is() {
+        return 'posicion-raton';
+      }
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          x: Number,
+          y: Number
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        console.log('conectado');
+        window.addEventListener('mousemove', this.actualizaPosicion.bind(this)); // El bind no nos deja desconectar el evento
+
+      }
+
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        console.log('desconectado');
+        window.removeEventListener('mousemove', this.actualizaPosicion.bind(this)); // se desconecta pero si vuelves a mover el ratón se vuelvfe a conectar el movimiento del ratón
+      }
+
+      actualizaPosicion(e) {
+        console.log('actualizando', e);
+        this.x = e.offsetX;
+        this.y = e.offsetY;
+      }
+    }
+
+    window.customElements.define(PosicionRaton.is, PosicionRaton);
+  </script>
+</dom-module>

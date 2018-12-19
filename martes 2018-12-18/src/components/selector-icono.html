@@ -1,0 +1,85 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+
+<dom-module id="selector-icono">
+    <template>
+        <style>
+            :host {
+                display: block
+            }
+            iron-icon {
+                --iron-icon-width: 100px;
+                --iron-icon-height: 100px;
+            }
+            .alarmOn {
+                color: red;
+            }
+            .alarmOff {
+                color: blue;
+            }
+        </style>
+        <iron-icon on-click="iconToggle" icon="[[iconName]]" class$="[[iconClass]]"></iron-icon>
+
+        
+
+    </template>
+
+    <script>
+        /**
+         * `selector-icono` Description
+         *
+         * @summary ShortDescription.
+         * @customElement
+         * @polymer
+         * @extends {Polymer.Element}
+         */
+        class SelectorIcono extends Polymer.Element {
+            /**
+             * String providing the tag name to register the element under.
+             */
+            static get is() {
+                return 'selector-icono';
+            }
+
+            /**
+             * Object describing property-related metadata used by Polymer features
+             */
+            static get properties() {
+                return {
+                    on: {
+                        type: Boolean,
+                        value: false 
+                    },
+                    iconName: {
+                        type: String,
+                        computed: 'getIconName(on)'
+                    },
+                    iconClass: {
+                        type: String,
+                        computed: 'getIconClass(on)'
+                    } 
+                };
+            }
+
+            iconToggle() {
+                this.on = !this.on;
+            }
+
+            getIconName(on) {
+                if (on) {
+                    return 'icons:alarm-on';
+                }
+                return 'icons:alarm-off';
+            }
+
+            getIconClass(on) {
+                return (on) ? 'alarmOn' : 'alarmOff';
+            }
+
+        }
+
+        window.customElements.define(SelectorIcono.is, SelectorIcono);
+    </script>
+</dom-module>

@@ -1,0 +1,6 @@
+{
+  "name": "martes-app",
+  "short_name": "martes-app",
+  "start_url": "/",
+  "display": "standalone"
+}

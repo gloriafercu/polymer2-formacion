@@ -1,0 +1,6 @@
+{
+  "name": "miercoles-app",
+  "short_name": "miercoles-app",
+  "start_url": "/",
+  "display": "standalone"
+}

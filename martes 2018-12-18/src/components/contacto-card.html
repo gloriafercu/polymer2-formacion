@@ -1,0 +1,67 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="contacto-card">
+    <template>
+        <style>
+            :host {
+                display: block;
+                margin-top: 20px;
+                color: red;
+            }
+            div {
+                color: blue;
+                background-color: #eee;
+                padding: 15px;
+                display: inline-block;
+                box-shadow: 2px 2px 10px #ddd;
+                font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+            }
+            p {
+                font-weight: bold;
+            }
+            .email {
+                color: green;
+            }
+        </style>
+
+        <div>
+            <p>Nombre: [[nombre]]</p>
+            <p class="email">Email: [[email]]</p>
+        </div>
+    </template>
+
+    <script>        
+        /**
+         * `contacto-card` Description
+         *
+         * @summary ShortDescription.
+         * @customElement
+         * @polymer
+         * @extends {Polymer.Element}
+         */
+        class ContactoCard extends Polymer.Element {
+            /**
+             * String providing the tag name to register the element under.
+             */
+            static get is() {
+                return 'contacto-card';
+            }
+
+            /**
+             * Object describing property-related metadata used by Polymer features
+             */
+            static get properties() {
+                return {
+                    nombre: String,
+                    email: {
+                        type: String,
+                        value: '...@...'
+                    }
+                };
+            }
+
+        }
+
+        window.customElements.define(ContactoCard.is, ContactoCard);
+    </script>
+</dom-module>

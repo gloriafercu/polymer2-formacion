@@ -1,0 +1,105 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="cuenta-atras">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+
+      span {
+        font-weight: bold;
+      }
+    </style>
+
+    Quedan <span id="sec" on-mouseover="resaltar">[[segundos]]</span> segundos
+
+  </template>
+
+  <script>
+    /**
+     * `cuenta-atras` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class CuentaAtras extends Polymer.Element {
+      /**
+       * String providing the tag name to register the element under.
+       */
+      static get is() {
+        return 'cuenta-atras';
+      }
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          segundos: {
+            type: Number,
+            value: 60,
+            reflectToAttribute: true
+          },
+          stopped: {
+            type: Boolean,
+            vlue: false
+          }
+        };
+      }
+
+      /**
+       * Instance of the element is created/upgraded. Use: initializing state,
+       * set up event listeners, create shadow dom.
+       * @constructor
+       */
+      constructor() {
+        super();
+      }
+
+      /**
+       * Use for one-time configuration of your component after local DOM is initialized. 
+       */
+      ready() {
+        super.ready();
+        this.cuentaAtras();
+        this.$.sec.addEventListener('mouseout', this.quitarResaltado.bind(this));
+        this.addEventListener('click', this.pararCuentaAtras.bind(this)); // Me afecta a todo el componente con el This
+      }
+
+      cuentaAtras() {
+        this.segundos--;
+        if (this.segundos == 0) {
+          this.dispatchEvent(new CustomEvent('cuenta-atras-fin'));
+        }
+        if (this.segundos > 0 && !this.stopped) {
+          setTimeout(() => this.cuentaAtras(), 1000);
+        }
+      }
+
+      resaltar() {
+        console.log('resaltar');
+        this.$.sec.style.color = "red";
+      }
+
+      quitarResaltado() {
+        this.$.sec.style.color = "black";
+      }
+
+      pararCuentaAtras() {
+        this.stopped = true;
+        this.dispatchEvent(new CustomEvent('cuenta-atras-stopped', {
+          detail: {
+            segundos: this.segundos,
+            foo: 'fooooo'
+          }
+        }));
+      }
+    }
+
+    window.customElements.define(CuentaAtras.is, CuentaAtras);
+
+  </script>
+</dom-module>

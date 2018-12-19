@@ -1,0 +1,75 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="fortaleza-clave">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+    <input type="password" value="{{clave::input}}">
+    <input type="password" value="{{claveRepetida::input}}">
+    <div>[[fortaleza]]</div>
+    <div>[[msgIguales]]</div>
+  </template>
+
+  <script>
+    /**
+     * `fortaleza-clave` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class FortalezaClave extends Polymer.Element {
+      /**
+       * String providing the tag name to register the element under.
+       */
+      static get is() {
+        return 'fortaleza-clave';
+      }
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          clave: {
+            type: String,
+            value: '',
+            observer: 'calcularFortaleza'
+          },
+          fortaleza: String,
+          msgIguales: String    
+        };
+      }
+
+      /**
+        * Array of strings describing multi-property observer methods and their
+        * dependant properties
+        */
+      static get observers() {
+        return [
+          'clavesChanged(clave, claveRepetida)'
+        ];
+      }
+
+      clavesChanged(clave, claveRepetida) {
+        this.msgIguales = (clave == claveRepetida) ? 'Son iguales' : 'Las claves son diferentes'
+        console.log('clavesChanged: ', clave, claveRepetida);
+      }
+      
+      calcularFortaleza(clave, oldClave) {
+        console.log(clave, oldClave);
+        if (clave.length > 5 ) {
+          this.fortaleza = 'fuerte';
+        } else {
+          this.fortaleza = 'débil'
+        }
+      }
+    }
+
+    window.customElements.define(FortalezaClave.is, FortalezaClave);
+  </script>
+</dom-module>

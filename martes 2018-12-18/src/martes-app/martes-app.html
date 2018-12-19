@@ -1,0 +1,42 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../components/contacto-card.html">
+<link rel="import" href="../components/contacto-list.html">
+<link rel="import" href="../components/selector-icono.html">
+
+<dom-module id="martes-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <selector-icono></selector-icono>
+    <contacto-list></contacto-list>
+    <h2>Hello [[prop1]]!</h2>
+    <button on-click="doClick">Click</button>
+    <contacto-card nombre="Gloria" email="gloriafercu@gmail.com"></contacto-card>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class MartesApp extends Polymer.Element {
+      static get is() { return 'martes-app'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'martes-app'
+          }
+        };
+      }
+      doClick() {
+        this.prop1 = "Gloria";
+      }
+    }
+
+    window.customElements.define(MartesApp.is, MartesApp);
+  </script>
+</dom-module>

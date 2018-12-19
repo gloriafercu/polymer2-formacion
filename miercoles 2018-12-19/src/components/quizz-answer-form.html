@@ -1,0 +1,75 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+
+<dom-module id="quizz-answer-form">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+      .correcto {
+        color: green
+      }
+      .incorrecto {
+        color: red
+      }
+    </style>
+
+    <input type="text" value="{{answer::input}}" class$="[[getInputClass(answer)]]">
+    <!-- <paper-input label="Respuesta" value="{{answer}}"></paper-input> -->
+    <button on-click="altaRespuesta">Alta de respuesta</button>
+
+  </template>
+
+  <script>
+    /**
+     * `quizz-answer-form` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class QuizzAnswerForm extends Polymer.Element {
+      /**
+       * String providing the tag name to register the element under.
+       */
+      static get is() {
+        return 'quizz-answer-form';
+      }
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          answer: {
+            type: String,
+            value: 'valor'
+          }
+        };
+      }
+
+      getInputClass(answer) {
+        if (answer.length > 3) {
+          return 'correcto';
+        }
+        return 'incorrecto';
+      }
+
+      altaRespuesta() {
+      
+        if (this.answer == '') {
+          return false;
+        }
+        console.log('alta respuesta: ', this.answer);
+        this.dispatchEvent(new CustomEvent('quizz-answer-form-create', {
+          detail: this.answer
+        }));
+      }
+
+    }
+
+    window.customElements.define(QuizzAnswerForm.is, QuizzAnswerForm);
+  </script>
+</dom-module>
