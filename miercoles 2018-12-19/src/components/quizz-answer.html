@@ -6,9 +6,13 @@
       :host {
         display: block
       }
+      .selected {
+        background-color: red;
+        color: white;
+      }
     </style>
 
-    <p on-click="seleccionar">[[index]] [[answer]]</p>
+    <p class$="[[myClass]]" on-click="seleccionar">[[answer.id]] [[answer.text]]</p>
    
   </template>
 
@@ -30,19 +34,42 @@
       }
 
       /**
+        * Array of strings describing multi-property observer methods and their
+        * dependant properties
+        */
+      static get observers() {
+        return [
+          'answerSelectedChanged(answer.selected)'
+        ];
+      }
+
+      /**
        * Object describing property-related metadata used by Polymer features
        */
       static get properties() {
         return {
-          answer: String,
-          index: Number 
+          answer: Object,
+          myClass: String
         };
       }
 
-      seleccionar(e) {
-        console.log('Han seleccionado: ', this.index, this.answer);  
+      seleccionar() {
+        //console.log('Han seleccionado: ', this.answer.id, this.answer.text);
+        //this.set('answer.selected', !this.answer.selected)
+        this.dispatchEvent(new CustomEvent('quizz-answer-selected-changed', {
+          bubbles: true,
+          composed: true,
+          detail: this.answer
+        })); // lanzo un evento personalizado para que miercoles-app se entere de que se ha seleccionado una respuesta (esto es lo correcto)
       }
 
+      answerSelectedChanged(selected) {
+        if (selected) {
+          this.myClass = "selected";
+        } else {
+          this.myClass = "";
+        }
+      }
     }
 
     window.customElements.define(QuizzAnswer.is, QuizzAnswer);

@@ -1,11 +1,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../styles/input-styles.html">
 
 <dom-module id="quizz-answer-form">
   <template>
-    <style>
+    <style include="input-styles">
       :host {
-        display: block
+        display: block;
+        --paper-input-container-focus-color: orange;
       }
       .correcto {
         color: green
@@ -16,7 +18,7 @@
     </style>
 
     <input type="text" value="{{answer::input}}" class$="[[getInputClass(answer)]]">
-    <!-- <paper-input label="Respuesta" value="{{answer}}"></paper-input> -->
+    <paper-input label="Respuesta" value="{{answer}}"></paper-input>
     <button on-click="altaRespuesta">Alta de respuesta</button>
 
   </template>

@@ -3,12 +3,23 @@
 <link rel="import" href="../components/quizz-answer-form.html">
 <link rel="import" href="../components/fortaleza-clave.html">
 <link rel="import" href="../components/quizz-answer-list.html">
+<link rel="import" href="../../bower_components/iron-dropdown/iron-dropdown.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
 <dom-module id="miercoles-app">
   <template>
     <style>
       :host {
         display: block;
+        --paper-input-container-focus-color: orange;
+        --paper-button: {
+          background-color: orange;
+          color: white;
+        }
+      }
+      .drop {
+        background-color: #eee;
+        padding: 15px;
       }
     </style>
 
@@ -20,10 +31,23 @@
     <h1>[[pregunta.text]] ([[pregunta.puntos]])</h1>
 
     <quizz-answer-list
-      respuestas="[[respuestas]]">
+      respuestas="[[respuestas]]"
+      on-quizz-answer-selected-changed="alterarRespuesta">
     </quizz-answer-list>
 
-    <quizz-answer-form on-quizz-answer-form-create="altaRespuesta"></quizz-answer-form>
+    <div class="menu-alta">
+      <paper-button on-click="dropDownOpen">Alta</paper-button>
+      <!-- <button on-click="dropDownOpen">alta</button> -->
+      <iron-dropdown horizontal-align="left" vertical-align="top" vertical-offset="20" id="dropdown" no-overlap>
+        <div class="drop" slot="dropdown-content">
+          <b>Hola a todos!</b>
+          <quizz-answer-form on-quizz-answer-form-create="altaRespuesta"></quizz-answer-form>
+          <a href="#" on-click="dropDownClose">Cerrar</a>
+        </div>
+      </iron-dropdown>
+    </div>
+
+    
     <button on-click="modificaPregunta">Modifica pregunta</button>
 
     <fortaleza-clave></fortaleza-clave>
@@ -53,7 +77,7 @@
           respuestas: {
             type: Array,
             value: function() {
-              return ['a', 'b', 'c']
+              return []
             }
           },
           respuesta: {
@@ -63,6 +87,20 @@
         };
       }
 
+      /**
+        * Array of strings describing multi-property observer methods and their
+        * dependant properties
+        */
+      static get observers() {
+        return [
+          'arrayRespuestasChanged(respuestas.splices)'
+        ];
+      }
+
+      arrayRespuestasChanged(splices) {
+        console.log(splices);
+      }
+
       modificaPregunta() {
         this.pregunta.text = 'A qué huelen las nubes?';
         this.set('pregunta.text', 'Cuántos colores tiene el arco iris?');
@@ -70,7 +108,11 @@
  
       altaRespuesta(e) {
         console.log('voy a realizar el alta: ', e.detail);
-        this.push('respuestas', e.detail);
+        this.push('respuestas', {
+          text:  e.detail,
+          id: this.respuestas.length + 1,
+          selected: false
+        });
       }
 
       finalizado() {
@@ -81,6 +123,23 @@
         console.log('Me han parado en: ' + e.detail.segundos + ' segundos');
       }
 
+      alterarRespuesta(e) {
+        console.log('Me han pedido alterar la respuesta: ', e.detail);
+        let index = this.respuestas.findIndex((item) => {
+          return (item.id == e.detail.id);
+        })
+        //this.respuestas[index].selected = !this.respuestas[index].selected;
+        this.set(`respuestas.${index}.selected`, !this.respuestas[index].selected);
+      }
+
+      dropDownOpen() {
+        this.$.dropdown.open();
+      }
+
+      dropDownClose(e) {
+        e.preventDefault(); // Previene el comportamiento por defecto del enlace que es llevarte a la ruta que le digas en el href, para que no te ponga la # en este caso
+        this.$.dropdown.close();
+      }
     }
 
     window.customElements.define(MiercolesApp.is, MiercolesApp);
