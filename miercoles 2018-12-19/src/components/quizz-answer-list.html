@@ -1,0 +1,52 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../components/quizz-answer.html">
+
+<dom-module id="quizz-answer-list">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+
+    <template is="dom-repeat" items="[[respuestas]]">
+      <quizz-answer
+        index="[[index]]"
+        answer="[[item]]">
+      </quizz-answer>
+    </template>
+
+  </template>
+
+  <script>
+    /**
+     * `quizz-answer-list` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class QuizzAnswerList extends Polymer.Element {
+      /**
+       * String providing the tag name to register the element under.
+       */
+      static get is() {
+        return 'quizz-answer-list';
+      }
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          respuestas: {
+            type: Array
+          }
+        };
+      }  
+    }
+
+    window.customElements.define(QuizzAnswerList.is, QuizzAnswerList);
+  </script>
+</dom-module>

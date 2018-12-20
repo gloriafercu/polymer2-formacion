@@ -1,0 +1,50 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="quizz-answer">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+
+    <p on-click="seleccionar">[[index]] [[answer]]</p>
+   
+  </template>
+
+  <script>
+    /**
+     * `quizz-answer` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class QuizzAnswer extends Polymer.Element {
+      /**
+       * String providing the tag name to register the element under.
+       */
+      static get is() {
+        return 'quizz-answer';
+      }
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          answer: String,
+          index: Number 
+        };
+      }
+
+      seleccionar(e) {
+        console.log('Han seleccionado: ', this.index, this.answer);  
+      }
+
+    }
+
+    window.customElements.define(QuizzAnswer.is, QuizzAnswer);
+  </script>
+</dom-module>

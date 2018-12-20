@@ -2,6 +2,7 @@
 <link rel="import" href="../components/cuenta-atras.html">
 <link rel="import" href="../components/quizz-answer-form.html">
 <link rel="import" href="../components/fortaleza-clave.html">
+<link rel="import" href="../components/quizz-answer-list.html">
 
 <dom-module id="miercoles-app">
   <template>
@@ -18,9 +19,9 @@
 
     <h1>[[pregunta.text]] ([[pregunta.puntos]])</h1>
 
-    <template is="dom-repeat" items="[[respuestas]]">
-      <p>[[item]]</p>
-    </template>
+    <quizz-answer-list
+      respuestas="[[respuestas]]">
+    </quizz-answer-list>
 
     <quizz-answer-form on-quizz-answer-form-create="altaRespuesta"></quizz-answer-form>
     <button on-click="modificaPregunta">Modifica pregunta</button>
