@@ -1,0 +1,25 @@
+<script>
+
+  /**
+   * 
+   * @polymerMixin
+   * @mixinFunction
+   */
+  const EmisorFeedbackMixin = (superclass) => class extends superclass {
+    feedbackPositivo(msg) {
+      this.dispatchEvent(new CustomEvent('feedback-positivo', {
+        bubbles: true,
+        composed: true,
+        detail: msg
+      }));
+    }
+    feedbackNegativo(msg) {
+      this.dispatchEvent(new CustomEvent('feedback-negativo', {
+        bubbles: true,
+        composed: true,
+        detail: msg
+      }));
+    }
+  }
+
+</script>

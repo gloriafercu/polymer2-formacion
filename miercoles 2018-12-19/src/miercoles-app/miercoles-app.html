@@ -5,34 +5,43 @@
 <link rel="import" href="../components/quizz-answer-list.html">
 <link rel="import" href="../../bower_components/iron-dropdown/iron-dropdown.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../mixins/emisor-feedback-mixin.html">
 
 <dom-module id="miercoles-app">
   <template>
     <style>
+      #toasterror {
+        background-color: red;
+        color: white;
+      }
+
       :host {
         display: block;
         --paper-input-container-focus-color: orange;
+
         --paper-button: {
           background-color: orange;
           color: white;
         }
+
+        fortaleza-clave {
+          color: var(--barra-fortaleza-indicator-color, red);
+        }
       }
+
       .drop {
         background-color: #eee;
         padding: 15px;
       }
     </style>
 
-    <cuenta-atras 
-      segundos="10" 
-      on-cuenta-atras-fin="finalizado" on-cuenta-atras-stopped="parado">
+    <cuenta-atras segundos="10" on-cuenta-atras-fin="finalizado" on-cuenta-atras-stopped="parado">
     </cuenta-atras>
 
     <h1>[[pregunta.text]] ([[pregunta.puntos]])</h1>
 
-    <quizz-answer-list
-      respuestas="[[respuestas]]"
-      on-quizz-answer-selected-changed="alterarRespuesta">
+    <quizz-answer-list respuestas="[[respuestas]]" on-quizz-answer-selected-changed="alterarRespuesta">
     </quizz-answer-list>
 
     <div class="menu-alta">
@@ -47,11 +56,14 @@
       </iron-dropdown>
     </div>
 
-    
-    <button on-click="modificaPregunta">Modifica pregunta</button>
+    <paper-button on-click="modificaPregunta">Modifica pregunta</paper-button>
+    <!-- <button on-click="modificaPregunta">Modifica pregunta</button> -->
 
     <fortaleza-clave></fortaleza-clave>
-   
+
+    <paper-toast id="toast"></paper-toast>
+    <paper-toast id="toasterror"></paper-toast>
+
 
   </template>
 
@@ -60,13 +72,13 @@
      * @customElement
      * @polymer
      */
-    class MiercolesApp extends Polymer.Element {
+    class MiercolesApp extends EmisorFeedbackMixin(Polymer.Element) {
       static get is() { return 'miercoles-app'; }
       static get properties() {
         return {
           pregunta: {
             type: Object,
-            value: function() {
+            value: function () {
               return {
                 text: 'Qué fue antes el huevo  o la gallina?',
                 puntos: 10
@@ -76,7 +88,7 @@
           },
           respuestas: {
             type: Array,
-            value: function() {
+            value: function () {
               return []
             }
           },
@@ -87,15 +99,24 @@
         };
       }
 
+      ready() {
+        super.ready();
+        this.addEventListener('feedback-positivo', (e) => this.showToast(e.detail));
+        this.addEventListener('feedback-negativo', (e) => this.showToastError(e.detail))
+      }
+
       /**
         * Array of strings describing multi-property observer methods and their
         * dependant properties
         */
+
       static get observers() {
         return [
           'arrayRespuestasChanged(respuestas.splices)'
         ];
       }
+
+
 
       arrayRespuestasChanged(splices) {
         console.log(splices);
@@ -103,19 +124,21 @@
 
       modificaPregunta() {
         this.pregunta.text = 'A qué huelen las nubes?';
+        this.feedbackNegativo('Ojo, que la pregunta cambió!');
         this.set('pregunta.text', 'Cuántos colores tiene el arco iris?');
       }
- 
+
       altaRespuesta(e) {
         console.log('voy a realizar el alta: ', e.detail);
         this.push('respuestas', {
-          text:  e.detail,
+          text: e.detail,
           id: this.respuestas.length + 1,
           selected: false
         });
       }
 
       finalizado() {
+        this.feedbackPositivo('El contador ha llegado al fin');
         console.log('He finalizado!');
       }
 
@@ -139,6 +162,14 @@
       dropDownClose(e) {
         e.preventDefault(); // Previene el comportamiento por defecto del enlace que es llevarte a la ruta que le digas en el href, para que no te ponga la # en este caso
         this.$.dropdown.close();
+      }
+
+      showToast(msg) {
+        this.$.toast.show(msg);
+      }
+
+      showToastError(msg) {
+        this.$.toasterror.show(msg);
       }
     }
 

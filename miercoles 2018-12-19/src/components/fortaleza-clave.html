@@ -7,10 +7,13 @@
       :host {
         display: block
       }
+      .label-fortaleza {
+        color: var(--barra-fortaleza-indicator-color, pink);
+      }
     </style>
     <input type="password" value="{{clave::input}}">
     <input type="password" value="{{claveRepetida::input}}">
-    <div>[[fortaleza]]</div>
+    <div class="label-fortaleza">[[fortaleza]]</div>
     <div>[[msgIguales]]</div>
   </template>
 
@@ -42,7 +45,7 @@
             observer: 'calcularFortaleza'
           },
           fortaleza: String,
-          msgIguales: String    
+          msgIguales: String
         };
       }
 
@@ -60,10 +63,10 @@
         this.msgIguales = (clave == claveRepetida) ? 'Son iguales' : 'Las claves son diferentes'
         console.log('clavesChanged: ', clave, claveRepetida);
       }
-      
+
       calcularFortaleza(clave, oldClave) {
         console.log(clave, oldClave);
-        if (clave.length > 5 ) {
+        if (clave.length > 5) {
           this.fortaleza = 'fuerte';
         } else {
           this.fortaleza = 'débil'
