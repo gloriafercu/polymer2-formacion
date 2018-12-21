@@ -39,6 +39,11 @@
         };
       }
 
+      constructor() {
+        super();
+        this.capturarPosicion = this.actualizaPosicion.bind(this); // De esta forma si que me funciona bien
+      }
+
       connectedCallback() {
         super.connectedCallback();
         console.log('conectado');
@@ -49,7 +54,7 @@
       disconnectedCallback() {
         super.disconnectedCallback();
         console.log('desconectado');
-        window.removeEventListener('mousemove', this.actualizaPosicion.bind(this)); // se desconecta pero si vuelves a mover el ratón se vuelvfe a conectar el movimiento del ratón
+        window.removeEventListener('mousemove', this.actualizaPosicion.bind(this)); // se desconecta pero si vuelves a mover el ratón se vuelve a conectar el movimiento del ratón
       }
 
       actualizaPosicion(e) {

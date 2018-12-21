@@ -1,0 +1,74 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-movies">
+  <template>
+
+    <style include="shared-styles">
+      :host {
+        display: block
+      }
+    </style>
+
+    <iron-ajax 
+      url="http://localhost:3000/peliculas" 
+      auto 
+      last-response="{{peliculas}}"
+      loading="{{loading}}"
+    ></iron-ajax>
+
+    <paper-spinner 
+      active="[[loading]]"
+    ></paper-spinner>
+
+    <div class="card">
+      <h1>Películas</h1>
+      <p>Esto será un listado de películas</p>
+      <template is="dom-repeat" items="[[peliculas]]">
+        <ul>
+          <li>
+            [[item.nombre]]
+            <a href$="/editar-pelicula/[[item.id]]">Editar</a>
+          </li>
+        </ul>
+      </template>
+    </div>
+
+  </template>
+
+  <script>
+    /**
+     * `my-movies` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class MyMovies extends Polymer.Element {
+      /**
+       * String providing the tag name to register the element under.
+       */
+      static get is() {
+        return 'my-movies';
+      }
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          peliculas: Array,
+          loading: Boolean
+        };
+      }
+
+
+    }
+
+    window.customElements.define(MyMovies.is, MyMovies);
+  </script>
+</dom-module>

@@ -7,6 +7,7 @@
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../mixins/emisor-feedback-mixin.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
 
 <dom-module id="miercoles-app">
   <template>
@@ -39,22 +40,31 @@
     <cuenta-atras segundos="10" on-cuenta-atras-fin="finalizado" on-cuenta-atras-stopped="parado">
     </cuenta-atras>
 
+    <template is="dom-if" if="[[!finalizadoState]]">
+      <quizz-answer-list respuestas="[[respuestas]]" on-quizz-answer-selected-changed="alterarRespuesta">
+      </quizz-answer-list>
+
+      <div class="menu-alta">
+        <paper-button on-click="dropDownOpen">Alta</paper-button>
+        <!-- <button on-click="dropDownOpen">alta</button> -->
+        <iron-dropdown horizontal-align="left" vertical-align="top" vertical-offset="20" id="dropdown" no-overlap>
+          <div class="drop" slot="dropdown-content">
+            <b>Hola a todos!</b>
+            <quizz-answer-form on-quizz-answer-form-create="altaRespuesta"></quizz-answer-form>
+            <a href="#" on-click="dropDownClose">Cerrar</a>
+          </div>
+        </iron-dropdown>
+      </div>
+    </template>
+
+    <template is="dom-if" if="[[finalizadoState]]">
+      <p>Tu tiempo ha acabado!!</p>
+    </template>
+
+
     <h1>[[pregunta.text]] ([[pregunta.puntos]])</h1>
 
-    <quizz-answer-list respuestas="[[respuestas]]" on-quizz-answer-selected-changed="alterarRespuesta">
-    </quizz-answer-list>
 
-    <div class="menu-alta">
-      <paper-button on-click="dropDownOpen">Alta</paper-button>
-      <!-- <button on-click="dropDownOpen">alta</button> -->
-      <iron-dropdown horizontal-align="left" vertical-align="top" vertical-offset="20" id="dropdown" no-overlap>
-        <div class="drop" slot="dropdown-content">
-          <b>Hola a todos!</b>
-          <quizz-answer-form on-quizz-answer-form-create="altaRespuesta"></quizz-answer-form>
-          <a href="#" on-click="dropDownClose">Cerrar</a>
-        </div>
-      </iron-dropdown>
-    </div>
 
     <paper-button on-click="modificaPregunta">Modifica pregunta</paper-button>
     <!-- <button on-click="modificaPregunta">Modifica pregunta</button> -->
@@ -63,7 +73,6 @@
 
     <paper-toast id="toast"></paper-toast>
     <paper-toast id="toasterror"></paper-toast>
-
 
   </template>
 
@@ -95,6 +104,10 @@
           respuesta: {
             type: String,
             value: 'valor inicial'
+          },
+          finalizadoState: {
+            type: Boolean,
+            value: false
           }
         };
       }
@@ -115,8 +128,6 @@
           'arrayRespuestasChanged(respuestas.splices)'
         ];
       }
-
-
 
       arrayRespuestasChanged(splices) {
         console.log(splices);
@@ -139,6 +150,7 @@
 
       finalizado() {
         this.feedbackPositivo('El contador ha llegado al fin');
+        this.finalizadoState = true;
         console.log('He finalizado!');
       }
 

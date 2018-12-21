@@ -1,0 +1,115 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-editar-pelicula">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block
+      }
+    </style>
+
+    <app-route 
+      route="{{route}}" 
+      pattern="[[rootPath]]:id" 
+      data="{{routeData}}" 
+      tail="{{subroute}}"
+    ></app-route>
+
+    <iron-ajax 
+      id="ajaxid"
+      url="http://localhost:3000/peliculas/[[id]]" 
+      last-response="{{pelicula}}"
+    ></iron-ajax>
+
+    <iron-ajax 
+      id="ajaxput"
+      method="put"
+      body="[[pelicula]]"
+      content-type="application/json"
+      url="http://localhost:3000/peliculas/[[id]]"
+      on-response="putResponse"
+      on-error="putError"
+    ></iron-ajax>
+
+    <div class="card">
+      <h1>Editar Película</h1>
+    
+      <paper-input
+        label="Nombre"
+        value="{{pelicula.nombre}}">
+      </paper-input>
+      <paper-input
+        label="Director"
+        value="{{pelicula.director}}">
+      </paper-input>
+      <paper-button on-click="editar">Editar</paper-button>
+    </div>
+
+  </template>
+
+  <script>
+    /**
+     * `my-editar-pelicula` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class MyEditarPelicula extends Polymer.Element {
+      /**
+       * String providing the tag name to register the element under.
+       */
+      static get is() {
+        return 'my-editar-pelicula';
+      }
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          route: Object,
+          routeData: Object,
+          id: Number,
+          pelicula: Object
+        };
+      }
+
+      /**
+        * Array of strings describing multi-property observer methods and their
+        * dependant properties
+        */
+      static get observers() {
+        return [
+          'idChanged(routeData.id)'
+        ];
+      }
+
+      idChanged(id) {
+        this.id = id;
+        this.$.ajaxid.generateRequest();
+      }
+
+      editar() {
+        console.log('editar');
+        this.$.ajaxput.generateRequest()
+      }
+
+      putResponse(e) {
+        console.log(e.detail.request);
+      }
+
+      putError() {
+
+      }
+
+    }
+
+    window.customElements.define(MyEditarPelicula.is, MyEditarPelicula);
+  </script>
+</dom-module>
